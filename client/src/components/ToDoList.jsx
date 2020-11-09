@@ -9,42 +9,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
 const ToDoList = () => {
   const classes = useStyles();
 
   const [items, setItems] = useState([]);
 
-
-  const destroy = (item) => {
-    console.log("elemento a eliminar",item)
-    const arr = items.filter(i => i !==item);
-    
-    setItems(arr);
-    console.log("Ahora tengo",arr)
-
-    /*
-    let newItems = [...items];
-
-     newItems = newItems.filter( i => i!==item );
-    console.log("El nuevo es",newItems);
-    setItems(newItems);*/
-  }
+  const destroy = (item, e) => {
+    const newItems = items.filter(i => i !== item);
+    setItems(newItems);
+  };
 
   const createItem = item => {
-    const exist = items.filter(i => i===item);
-    (!exist) && setItems([...items, item]);
-    console.log("Ahora tengo",items)
+    const exist = items.filter(i => i === item);
+
+    
+    if (!exist.length) {
+      let arr = [...items,item]
+      setItems([...items, item]);
+    }
   };
   return (
     <div className={classes.root}>
       <Grid container xs={12} sm={12} md={12} spacing={2}>
-
-	{console.log("Voy aponer",items)}
-        {
-	  items.map(i => (
-          <Grid item xs={12} sm={6} md={3}>
-            <ToDoItem text={i} destroy={destroy}/>
+        {items.map(i => (
+          <Grid key={i} item xs={12} sm={6} md={3}>
+            <ToDoItem key={i} text={i} destroy={e => destroy(i, e)} />
           </Grid>
         ))}
         <Grid item xs={12}>

@@ -31,36 +31,39 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const handleNewDescription = (e,setNewDescription) => {
+const handleNewDescription = (e, setNewDescription) => {
   const { name, value } = e.target;
   console.log(value);
-  setNewDescription(value)
-}
+  setNewDescription(value);
+};
 
-const handleSave = (newDescription,setDescription,openDialog) => {
+const handleSave = (newDescription, setDescription, openDialog) => {
   setDescription(newDescription);
   openDialog(false);
-}
-  
+};
+
 const handleEdit = openDialog => {
   openDialog(true);
 };
 
-const handleCloseDialog = (setOpenDialog) => {
-  setOpenDialog(false)
+const handleCloseDialog = setOpenDialog => {
+  setOpenDialog(false);
 };
 const ToDoItem = props => {
   const classes = useStyles();
 
-  const { text } = props;
+  const { text, destroy } = props;
 
-  const [ newDescription, setNewDescription ] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   const [description, setDescription] = useState(text);
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
     <div>
-      <Dialog open={openDialog} onClose={() => handleCloseDialog(setOpenDialog)}>
+      <Dialog
+        open={openDialog}
+        onClose={() => handleCloseDialog(setOpenDialog)}
+      >
         <DialogTitle id="form-dialog-title">Editing Task "{text}"</DialogTitle>
         <DialogContent>
           <TextField
@@ -68,15 +71,23 @@ const ToDoItem = props => {
             margin="dense"
             id="name"
             label="Task Name"
-	    onChange={(e) => handleNewDescription(e,setNewDescription)}
+            onChange={e => handleNewDescription(e, setNewDescription)}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-	  <Button onClick={() => handleSave(newDescription,setDescription,setOpenDialog)} color="primary">
+          <Button
+            onClick={() =>
+              handleSave(newDescription, setDescription, setOpenDialog)
+            }
+            color="primary"
+          >
             Save
           </Button>
-          <Button onClick={() => handleCloseDialog(setOpenDialog)} color="primary">
+          <Button
+            onClick={() => handleCloseDialog(setOpenDialog)}
+            color="primary"
+          >
             Cancel
           </Button>
         </DialogActions>
@@ -88,12 +99,12 @@ const ToDoItem = props => {
             {description}
             <Button
               className={classes.button}
-	      onClick={() => handleEdit(setOpenDialog)}
+              onClick={() => handleEdit(setOpenDialog)}
               color="primary"
             >
               Edit
             </Button>
-            <Button className={classes.button} color="primary">
+	    <Button className={classes.button} onClick={destroy}color="primary">
               Remove
             </Button>
           </CardContent>
