@@ -11,6 +11,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const createNewFolder = (folderName) => {
+  axios
+    .post(api + "/folders", {
+      folderName: folderName,
+    })
+    .then(i => console.log("El post devolvio", i));
+};
+
+const removeFolder = async (folderName) => {
+  console.log("voy a borrar", folderName);
+
+  await axios({
+    method: "DELETE",
+    url: api + "/folders",
+    data: {
+      folderName: folderName
+    }
+  });
+};
+
 const getFolders = async (setFolders) => {
   let res;
   res = await axios.get(api + "/folders");
@@ -28,6 +48,7 @@ const FolderList = () => {
 
   const destroy = (folder, e) => {
     const newFolders = folders.filter(i => i !== folder);
+    removeFolder(folder)
     setFolders(newFolders);
   };
 
@@ -36,7 +57,9 @@ const FolderList = () => {
 
     if (!exist.length) {
       let arr = [...folder, folder];
+      createNewFolder(folder)
       setFolders([...folders, folder]);
+
     }
   };
   return (
