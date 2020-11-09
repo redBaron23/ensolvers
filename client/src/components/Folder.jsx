@@ -8,8 +8,7 @@ import {
   makeStyles,
   Card,
   Button,
-  CardContent,
-  Checkbox
+  CardContent
 } from "@material-ui/core/";
 
 const useStyles = makeStyles(theme => ({
@@ -24,10 +23,8 @@ const useStyles = makeStyles(theme => ({
     flex: "1 0 auto"
   },
   checkbox: {
-    flexGrow: 0.2
   },
   button: {
-    flexGrow: 0.8
   }
 }));
 
@@ -37,9 +34,8 @@ const handleNewDescription = (e, setNewDescription) => {
   setNewDescription(value);
 };
 
-const handleSave = (newDescription, setDescription, openDialog,description,folderName,editTaskName) => {
+const handleSave = (newDescription, setDescription, openDialog) => {
   setDescription(newDescription);
-  editTaskName(description,newDescription,folderName);
   openDialog(false);
 };
 
@@ -50,10 +46,10 @@ const handleEdit = openDialog => {
 const handleCloseDialog = setOpenDialog => {
   setOpenDialog(false);
 };
-const ToDoItem = props => {
+const Folder = props => {
   const classes = useStyles();
 
-  const { text, destroy,folderName,editTaskName } = props;
+  const { text, destroy } = props;
 
   const [newDescription, setNewDescription] = useState("");
   const [description, setDescription] = useState(text);
@@ -79,7 +75,7 @@ const ToDoItem = props => {
         <DialogActions>
           <Button
             onClick={() =>
-              handleSave(newDescription, setDescription, setOpenDialog,description,folderName,editTaskName)
+              handleSave(newDescription, setDescription, setOpenDialog)
             }
             color="primary"
           >
@@ -96,14 +92,13 @@ const ToDoItem = props => {
       <Card className={classes.root} variant="outlined">
         <div className={classes.details}>
           <CardContent className={classes.content}>
-            <Checkbox className={classes.checkbox} />
-            {description}
+            {"- " + description}
             <Button
               className={classes.button}
               onClick={() => handleEdit(setOpenDialog)}
               color="primary"
             >
-              Edit
+              View Items
             </Button>
 	    <Button className={classes.button} onClick={destroy}color="primary">
               Remove
@@ -115,4 +110,4 @@ const ToDoItem = props => {
   );
 };
 
-export default ToDoItem;
+export default Folder;
