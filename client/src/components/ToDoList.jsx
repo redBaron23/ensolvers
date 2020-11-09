@@ -5,7 +5,7 @@ import { api } from "../config";
 import { React, useState, useEffect } from "react";
 import ToDoItem from "./ToDoItem";
 import NewBar from "./NewBar";
-import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core/";
+import { Box, Grid, makeStyles, Typography } from "@material-ui/core/";
 
 const folderName = "folderName";
 
@@ -33,7 +33,7 @@ const createTask = (item, folderName) => {
 const removeTask = async (item, folderName) => {
   console.log("voy a borrar", item, folderName);
 
-  const res = await axios({
+  await axios({
     method: "DELETE",
     url: api + "/items",
     data: {
@@ -44,7 +44,7 @@ const removeTask = async (item, folderName) => {
 };
 
 const getTasks = async (folderName, setItems) => {
-  let res, array;
+  let res;
   res = await axios.get(api + "/items", {
     params: {
       folderName: folderName
@@ -72,7 +72,6 @@ const ToDoList = () => {
     const exist = items.filter(i => i === item);
 
     if (!exist.length) {
-      let arr = [...items, item];
       setItems([...items, item]);
       createTask(item, folderName);
     }
