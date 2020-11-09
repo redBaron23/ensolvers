@@ -64,7 +64,7 @@ const ToDoItem = props => {
         open={openDialog}
         onClose={() => handleCloseDialog(setOpenDialog)}
       >
-        <DialogTitle id="form-dialog-title">Editing Task "{text}"</DialogTitle>
+        <DialogTitle id="form-dialog-title">Editing Task "{description}"</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
