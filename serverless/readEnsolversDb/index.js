@@ -124,8 +124,8 @@ exports.handler = async(event) => {
     }
 
     req = event;
-    if (event.httpMethod === "GET") req = event //event.queryStringParameters;
-    if (event.httpMethod === "POST" || event.httpMethod === "DELETE") req = event //JSON.parse(event.body);
+    if (event.httpMethod === "GET") req = event.queryStringParameters;
+    if (event.httpMethod === "POST" || event.httpMethod === "DELETE") req = JSON.parse(event.body);
 
 
     try {
