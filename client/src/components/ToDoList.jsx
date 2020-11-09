@@ -26,23 +26,27 @@ const createTask = (item, folderName) => {
     .then(i => console.log("El post devolvio", i));
 };
 
-const removeTask = (item, folderName) => {
-  axios
-    .delete(api + "items", {
-      folderName: folderName,
-      item: item
-    })
-    .then(i => console.log("El post devolvio", i));
+const removeTask = async (item, folderName) => {
+  console.log("voy a borrar", item, folderName);
+
+  const res = await axios({
+    method: "DELETE",
+    url: api + "/items",
+    data: {
+      item: item,
+      folderName: folderName
+    }
+  });
 };
 
-const getTasks = async(folderName,setItems) => {
-  let res,array;
+const getTasks = async (folderName, setItems) => {
+  let res, array;
   res = await axios.get(api + "/items", {
     params: {
       folderName: folderName
     }
   });
-  console.log("la res",res.data)
+  console.log("la res", res.data);
   setItems(res.data.map(i => i.name));
 };
 const ToDoList = () => {
@@ -51,12 +55,13 @@ const ToDoList = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-     getTasks(folderName,setItems);
-  },[]);
+    getTasks(folderName, setItems);
+  }, []);
 
   const destroy = (item, e) => {
     const newItems = items.filter(i => i !== item);
     setItems(newItems);
+    removeTask(item, folderName);
   };
 
   const createItem = item => {
