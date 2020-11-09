@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import ToDoItem from "./ToDoItem";
 import NewBar from "./NewBar";
-import { Box, Button, Grid, makeStyles } from "@material-ui/core/";
+import { Box, Button, Grid, makeStyles,Typography } from "@material-ui/core/";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +30,8 @@ const ToDoList = () => {
   };
   return (
     <div className={classes.root}>
+      <Box border={1}>
+	<Typography variant="h3">To-Do List</Typography>
       <Grid container xs={12} sm={12} md={12} spacing={2}>
         {items.map(i => (
           <Grid key={i} item xs={12} sm={6} md={3}>
@@ -40,6 +42,7 @@ const ToDoList = () => {
           <NewBar create={createItem} type="Task" />
         </Grid>
       </Grid>
+      </Box>
     </div>
   );
 };
