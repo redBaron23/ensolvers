@@ -9,22 +9,41 @@ import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core/";
 
 const folderName = "folderName";
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   }
 }));
 
-const getTasks = folderName => {
-  let res;
-  res = axios.get(api + "/items", {
+const editTaskname = taskName => {};
+
+const createTask = (item, folderName) => {
+  axios
+    .post(api + "/items", {
+      folderName: folderName,
+      item: item
+    })
+    .then(i => console.log("El post devolvio", i));
+};
+
+const removeTask = (item, folderName) => {
+  axios
+    .delete(api + "items", {
+      folderName: folderName,
+      item: item
+    })
+    .then(i => console.log("El post devolvio", i));
+};
+
+const getTasks = async(folderName,setItems) => {
+  let res,array;
+  res = await axios.get(api + "/items", {
     params: {
       folderName: folderName
     }
   });
-  console.log("Me devolvio", res);
-  return res;
+  console.log("la res",res.data)
+  setItems(res.data.map(i => i.name));
 };
 const ToDoList = () => {
   const classes = useStyles();
@@ -32,10 +51,8 @@ const ToDoList = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    if (!items.length) {
-      getTasks(folderName).then(i => setItems(i.data.map(i => i.name)));
-    }
-  });
+     getTasks(folderName,setItems);
+  },[]);
 
   const destroy = (item, e) => {
     const newItems = items.filter(i => i !== item);
@@ -48,11 +65,7 @@ const ToDoList = () => {
     if (!exist.length) {
       let arr = [...items, item];
       setItems([...items, item]);
-      axios.post(api+"/items",{
-	folderName:folderName,
-	item:item
-      })
-	.then(i => console.log("El post devolvio",i))
+      createTask(item, folderName);
     }
   };
   return (
