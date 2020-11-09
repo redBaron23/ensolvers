@@ -37,8 +37,9 @@ const handleNewDescription = (e, setNewDescription) => {
   setNewDescription(value);
 };
 
-const handleSave = (newDescription, setDescription, openDialog) => {
+const handleSave = (newDescription, setDescription, openDialog,description,folderName,editTaskName) => {
   setDescription(newDescription);
+  editTaskName(description,newDescription,folderName);
   openDialog(false);
 };
 
@@ -52,7 +53,7 @@ const handleCloseDialog = setOpenDialog => {
 const ToDoItem = props => {
   const classes = useStyles();
 
-  const { text, destroy } = props;
+  const { text, destroy,folderName,editTaskName } = props;
 
   const [newDescription, setNewDescription] = useState("");
   const [description, setDescription] = useState(text);
@@ -78,7 +79,7 @@ const ToDoItem = props => {
         <DialogActions>
           <Button
             onClick={() =>
-              handleSave(newDescription, setDescription, setOpenDialog)
+              handleSave(newDescription, setDescription, setOpenDialog,description,folderName,editTaskName)
             }
             color="primary"
           >
