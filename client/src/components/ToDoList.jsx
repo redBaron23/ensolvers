@@ -6,7 +6,9 @@ import { React, useState, useEffect } from "react";
 import ToDoItem from "./ToDoItem";
 import NewBar from "./NewBar";
 import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core/";
-import { test } from "../fun/helper.js";
+
+const folderName = "folderName";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,7 +33,7 @@ const ToDoList = () => {
 
   useEffect(() => {
     if (!items.length) {
-      getTasks("folderName").then(i => setItems(i.data.map(i => i.name)));
+      getTasks(folderName).then(i => setItems(i.data.map(i => i.name)));
     }
   });
 
@@ -46,6 +48,11 @@ const ToDoList = () => {
     if (!exist.length) {
       let arr = [...items, item];
       setItems([...items, item]);
+      axios.post(api+"/items",{
+	folderName:folderName,
+	item:item
+      })
+	.then(i => console.log("El post devolvio",i))
     }
   };
   return (
