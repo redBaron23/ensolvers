@@ -23,11 +23,11 @@ const getItems = async(folderName) => {
     return reqItems;
 }
 
-const deleteItem = async(itemName) => {
+const deleteItem = async(itemName,folderName) => {
     let row, items;
     row = await scanTable("item");
     console.log("la row es",row)
-    items = row.items.filter(i => i.name !== itemName);
+    items = row.items.filter(i => i.name !== itemName && i.folder !== folderName);
     row.items = items;
     
     await putRow(row);
@@ -126,7 +126,7 @@ exports.handler = async(event) => {
 
             else if (event.httpMethod === "DELETE") {
                 if (event.resource === "/items") {
-                    items = await deleteItem(req.item)
+                    items = await deleteItem(req.item,req.folderName)
                 }
                 else {
                     items = "Es un folder";
