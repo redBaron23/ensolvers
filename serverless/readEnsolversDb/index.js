@@ -3,43 +3,66 @@ const AWS = require("aws-sdk");
 
 AWS.config.update({ region: "us-east-1" });
 
-const getItems = async(folderName) => {
-    let items, reqItems;
+
+
+
+const deleteFolder = async(folderName) => {
     const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 
     const params = {
-        TableName: "Ensolvers",
+        TableName: "Ensolvers-dev",
         Key: {
-            type: "item"
+            folderName: folderName
+        }
+    }
+
+    const data = await documentClient.delete(params).promise();
+    return data;
+}
+
+const getItems = async(folderName) => {
+    let items;
+    const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
+
+    const params = {
+        TableName: "Ensolvers-dev",
+        Key: {
+            folderName: folderName
         }
     }
 
     const data = await documentClient.get(params).promise();
-    if (!data.Item) throw "User not found";
-    console.log(data.Item);
+    if (!data.Item) throw "Item not found";
+    console.log(data.Item.items);
     items = data.Item.items;
-    reqItems = items.filter(i => i.folder === folderName);
-    console.log(items);
-    return reqItems;
+    return items;
 }
 
-const deleteItem = async(itemName,folderName) => {
-    let row, items;
-    row = await scanTable("item");
-    console.log("la row es",row)
-    items = row.items.filter(i => i.name !== itemName && i.folder !== folderName);
-    row.items = items;
-    
-    await putRow(row);
+const deleteItem = async(itemName, folderName) => {
+    let items, newItems, folder;
+    items = await getItems(folderName);
+
+    console.log("la row es", items)
+
+    newItems = items.filter(i => i !== itemName);
+
+    console.log("la row es", newItems)
+
+
+    folder = {
+        folderName: folderName,
+        items: newItems
+    }
+    await createFolder(folder);
 }
 
 
-const putRow = async(row) => {
+const createFolder = async(folder) => {
     const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 
     const params = {
-        TableName: "Ensolvers",
-        Item: row
+        TableName: "Ensolvers-dev",
+        Item: folder
 
     }
 
@@ -51,28 +74,35 @@ const putRow = async(row) => {
         console.log(err);
     }
 }
-const scanTable = async(type) => {
+
+const getFolders = async() => {
     const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 
     var params = {
-        TableName: "Ensolvers"
+        TableName: "Ensolvers-dev"
     };
 
     const row = await documentClient.scan(params).promise();
-    return row.Items.find(i => i.type === type);
+    return row.Items.map(i => i.folderName);
 }
 
-const putItem = async(folderName, item) => {
-    let row;
 
-    row = await scanTable("item");
-    console.log("La row es ____", row)
-    row.items.push({
-        name: item,
-        folder: folderName
-    });
 
-    await putRow(row);
+
+
+const createItem = async(folderName, item) => {
+    let items, folder;
+
+
+    items = await getItems(folderName);
+    if (!items.includes(item)) items.push(item);
+
+    console.log("Mis iteme", items)
+    folder = { folderName: folderName, items: items }
+
+    await createFolder(folder);
+
+
 }
 
 
@@ -83,7 +113,7 @@ exports.handler = async(event) => {
 
     console.log("El evento", event)
 
-    let userName, items, errMessage, req;
+    let userName, res, errMessage, req;
 
 
     let response = {}
@@ -92,44 +122,48 @@ exports.handler = async(event) => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
     }
-    
+
     req = event;
-    if (event.httpMethod === "GET") req = event.queryStringParameters;
-    if(event.httpMethod === "POST" || event.httpMethod === "DELETE") req = JSON.parse(event.body);
+    if (event.httpMethod === "GET") req = event //event.queryStringParameters;
+    if (event.httpMethod === "POST" || event.httpMethod === "DELETE") req = event //JSON.parse(event.body);
 
 
     try {
 
         if (req.folderName || req.item) {
             if (event.httpMethod === "GET") {
-                
+
                 if (event.resource === "/items") {
-                    items = await getItems(req.folderName)
+                    res = await getItems(req.folderName)
                 }
                 else {
-                    items = "Es un folder";
+                    res = await getFolders();
                 }
 
                 response.statusCode = 200
-                response.body = JSON.stringify(items)
+                response.body = JSON.stringify(res)
             }
             else if (event.httpMethod === "POST") {
-                
+
                 if (event.resource === "/items") {
-                    items = await putItem(req.folderName, req.item)
+                    res = await createItem(req.folderName, req.item)
                 }
                 else {
-                    items = "Es un folder";
+                    let folder = {
+                        folderName: req.folderName,
+                        items: []
+                    }
+                    res = await createFolder(folder)
                 }
 
             }
 
             else if (event.httpMethod === "DELETE") {
                 if (event.resource === "/items") {
-                    items = await deleteItem(req.item,req.folderName)
+                    res = await deleteItem(req.item, req.folderName)
                 }
                 else {
-                    items = "Es un folder";
+                    res = await deleteFolder(req.folderName)
                 }
 
             }
