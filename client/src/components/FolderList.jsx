@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import  axios  from "axios";
+import axios from "axios";
 import { api } from "../config";
 import Folder from "./Folder";
 import NewBar from "./NewBar";
@@ -11,15 +11,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const createNewFolder = (folderName) => {
+const createNewFolder = folderName => {
   axios
     .post(api + "/folders", {
-      folderName: folderName,
+      folderName: folderName
     })
     .then(i => console.log("El post devolvio", i));
 };
 
-const removeFolder = async (folderName) => {
+const removeFolder = async folderName => {
   console.log("voy a borrar", folderName);
 
   await axios({
@@ -31,20 +31,17 @@ const removeFolder = async (folderName) => {
   });
 };
 
-const getFolders = async (setFolders) => {
+const getFolders = async setFolders => {
   let res;
   res = await axios.get(api + "/folders");
   console.log("la res", res.data);
-  setFolders(res.data)
+  setFolders(res.data);
 };
-const FolderList = (props) => {
-  
+const FolderList = props => {
   const { onFolder } = props;
   const [folders, setFolders] = useState([]);
 
   const classes = useStyles();
-
-
 
   useEffect(() => {
     getFolders(setFolders);
@@ -52,7 +49,7 @@ const FolderList = (props) => {
 
   const destroy = (folder, e) => {
     const newFolders = folders.filter(i => i !== folder);
-    removeFolder(folder)
+    removeFolder(folder);
     setFolders(newFolders);
   };
 
@@ -61,22 +58,28 @@ const FolderList = (props) => {
 
     if (!exist.length) {
       let arr = [...folder, folder];
-      createNewFolder(folder)
+      createNewFolder(folder);
       setFolders([...folders, folder]);
-
     }
   };
   return (
     <div className={classes.root}>
       <Box border={1}>
-        <Typography variant="h3">Folders</Typography>
         <Grid container xs={12} sm={12} md={12} spacing={2}>
+          <Grid key={-1} item xs={12}>
+            <Typography variant="h3">Folders</Typography>
+          </Grid>
           {folders.map(i => (
-            <Grid key={i} folder xs={12} sm={6} md={3}>
-	      <Folder key={i} onClick={e => onFolder(i)} text={i} destroy={e => destroy(i, e)} />
+            <Grid item key={i} folder xs={12} sm={6} md={3}>
+              <Folder
+                key={i}
+                onClick={e => onFolder(i)}
+                text={i}
+                destroy={e => destroy(i, e)}
+              />
             </Grid>
           ))}
-          <Grid folder xs={12}>
+          <Grid item xs={12}>
             <NewBar create={createFolder} type="Folder" />
           </Grid>
         </Grid>
