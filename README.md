@@ -27,7 +27,7 @@ First you need to clone this branch
 
 ### Prerequisites
 
-You will need node and npm installed.
+You will need node and npm installed. Or you can just use it on your browser [here](https://master.d1xbpv217otl93.amplifyapp.com)
 
 ### Installing
 
@@ -56,4 +56,4 @@ And that's it the project is running
 
 ### Important
 
-With the script you only can run the client-side because the lambda function and the dynamodb can't run on premise.
+With the script you can only  run the client-side because the lambda function and the dynamodb cannot run on premises.
