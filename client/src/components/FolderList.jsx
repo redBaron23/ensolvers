@@ -37,10 +37,14 @@ const getFolders = async (setFolders) => {
   console.log("la res", res.data);
   setFolders(res.data)
 };
-const FolderList = () => {
+const FolderList = (props) => {
+  
+  const { onFolder } = props;
+  const [folders, setFolders] = useState([]);
+
   const classes = useStyles();
 
-  const [folders, setFolders] = useState([]);
+
 
   useEffect(() => {
     getFolders(setFolders);
@@ -69,7 +73,7 @@ const FolderList = () => {
         <Grid container xs={12} sm={12} md={12} spacing={2}>
           {folders.map(i => (
             <Grid key={i} folder xs={12} sm={6} md={3}>
-              <Folder key={i} text={i} destroy={e => destroy(i, e)} />
+	      <Folder key={i} onClick={e => onFolder(i)} text={i} destroy={e => destroy(i, e)} />
             </Grid>
           ))}
           <Grid folder xs={12}>
