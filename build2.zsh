@@ -2,10 +2,9 @@
 #
 #
 
-npm install @material-ui/icons/LockOutlined.
-npm i
-npm run build;
-serve -s build &
+npm i ./client/
+npm run build ./client/;
+serve -s ./client/build &
 
 if which xdg-open > /dev/null
 then
