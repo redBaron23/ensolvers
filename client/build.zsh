@@ -2,7 +2,8 @@
 #
 #
 
-npm install @material-ui/icons/LockOutlined.
+
+npm install @material-ui/lab
 npm i
 npm run build;
 serve -s build &
