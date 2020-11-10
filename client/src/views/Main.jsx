@@ -7,7 +7,7 @@ import FolderList from "../components/FolderList";
 import  ButtonAppBar  from "../components/ButtonAppBar";
 
 const Main = () => {
-  const [view, setView] = useState("folders");
+  const [view, setView] = useState("login");
   const [folderName, setFolderName] = useState("");
 
   const enterFolder = folderName => {

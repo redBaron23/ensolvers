@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
+#
 
-cd client/
-chmod +x ./build.zsh
+cd ./client/
 ./build.zsh
