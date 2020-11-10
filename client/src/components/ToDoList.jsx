@@ -48,7 +48,7 @@ const getTasks = async (folderName, setItems) => {
     }
   });
   console.log("la res", res.data);
-  setItems(res.data.map(i => i.name));
+  setItems(res.data);
 };
 const ToDoList = props => {
   const { folderName, onExit } = props;
@@ -57,6 +57,7 @@ const ToDoList = props => {
   const classes = useStyles();
   useEffect(() => {
     getTasks(folderName, setItems);
+  console.log("items",items)
   }, []);
 
   const destroy = (item, e) => {
