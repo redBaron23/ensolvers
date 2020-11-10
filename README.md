@@ -50,8 +50,12 @@ serve -s ./build/index.html
 
 ```
 
-And that's it the project is running
+Now you are free to go.
 
+### Note
+
+User = manfred
+Password = 123456
 
 
 ### Important
