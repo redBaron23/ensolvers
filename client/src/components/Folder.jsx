@@ -49,7 +49,7 @@ const handleCloseDialog = setOpenDialog => {
 const Folder = props => {
   const classes = useStyles();
 
-  const { text, destroy } = props;
+  const { text, destroy,onClick } = props;
 
   const [newDescription, setNewDescription] = useState("");
   const [description, setDescription] = useState(text);
@@ -95,7 +95,7 @@ const Folder = props => {
             {"- " + description}
             <Button
               className={classes.button}
-              onClick={() => handleEdit(setOpenDialog)}
+              onClick={() => onClick()}
               color="primary"
             >
               View Items

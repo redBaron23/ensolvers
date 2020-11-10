@@ -1,15 +1,39 @@
+import { React, useState } from "react";
+
 import "../App.css";
-import ToDoList from "../components/ToDoList"
-
-import FolderList from "../components/FolderList"
-
+import ToDoList from "../components/ToDoList";
+import LogIn from "../components/LoginForm";
+import FolderList from "../components/FolderList";
+import  ButtonAppBar  from "../components/ButtonAppBar";
 
 const Main = () => {
+  const [view, setView] = useState("login");
+  const [folderName, setFolderName] = useState("");
+
+  const enterFolder = folderName => {
+    setFolderName(folderName);
+    setView("items");
+  };
+  const exitFolder = () => {
+    setView("folders");
+  };
+
+  const logOut = () => {
+
+    setView("login");
+  }
+
   return (
-    <header className="App-header">
-      <ToDoList />
-      <FolderList/>
-    </header>
+    <div  >
+      <ButtonAppBar onLogout={logOut} logged={view!=="login"} />
+      <div>
+        {view === "login" && <LogIn onLogin={exitFolder} />}
+        {view === "folders" && <FolderList onFolder={enterFolder} />}
+        {view === "items" && (
+          <ToDoList onExit={exitFolder} folderName={folderName} />
+        )}
+      </div>
+    </div>
   );
-}
+};
 export default Main;

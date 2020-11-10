@@ -23,7 +23,8 @@ const handleText = (e,setText) => {
   setText(value)
 };
 
-const handleButton = (create,text) => {
+const handleButton = (create,text,setText) => {
+  setText("");
   (text) && create(text)
 }
 
@@ -38,10 +39,11 @@ const NewBar = props => {
       <Box className={classes.root}>
         <TextField
           className={classes.text}
+	  value={text}
 	  onChange={(e) => handleText(e,setText)}
           label={"New " + type}
         />
-	<Button className={classes.button} color="primary" onClick={() => handleButton(create,text)}>
+	<Button className={classes.button} color="primary" onClick={() => handleButton(create,text,setText)}>
           Add
         </Button>
       </Box>
