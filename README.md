@@ -22,8 +22,9 @@ Serverless:
 
 * [Nodejs ] - 12.x
 * [Lambda] - This make the serverless magic!
+* [ EC2 ] - Virtual Cloud machine you can checkout the current master project [here](http://3.83.205.41:5000)
 * [Dynamodb] - A no-sql database
-* [Amplify] - You can checkout the CD/CI [master branch](https://master.d1xbpv217otl93.amplifyapp.com) and [dev branch](https://dev.d1xbpv217otl93.amplifyapp.com).
+* [Amplify] - You can checkout the CD/CI [old master branch](https://master.d1xbpv217otl93.amplifyapp.com) with Dynamo.
 * [ApiGateWay] - A way to connect the lambda function with the API/REST
 
 Frontend:
@@ -42,7 +43,7 @@ First you need to clone this branch
 * [ Docker ] - It uses a Mysql docker image
 * [ Java ] - 1.8
 
-You will need node and npm installed. Or you can just use it on your browser [here](https://master.d1xbpv217otl93.amplifyapp.com)
+You will need node and npm installed. Or you can just use it on your browser [here](http://3.83.205.41:5000)
 
 ### Installing
 
