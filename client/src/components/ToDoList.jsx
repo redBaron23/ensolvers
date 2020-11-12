@@ -13,9 +13,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const editTaskName = (taskName, newTaskName, folderName) => {
-  removeTask(taskName, folderName);
-  createTask(newTaskName, folderName);
+const editTaskName = async (taskName, newTaskName, folderName) => {
+  await removeTask(taskName, folderName);
+  await createTask(newTaskName, folderName);
 };
 
 const createTask = (item, folderName) => {
@@ -28,16 +28,24 @@ const createTask = (item, folderName) => {
 };
 
 const removeTask = async (item, folderName) => {
-  console.log("voy a borrar", item, folderName);
 
-  await axios({
-    method: "DELETE",
-    url: api + "/items",
-    data: {
-      item: item,
-      folderName: folderName
-    }
-  });
+  console.log("Borre la res", res);
+  let headers = {
+    Accept: "*/*",
+    "Access-Control-Allow-Methods": "*"
+  };
+  console.log("voy a borrar", folderName);
+  let url = api + "/items";
+  console.log("La uri", url);
+  let data = {
+    item: item,
+    folderName: folderName
+  };
+  fetch(url, {
+    method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+    headers: headers,
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  }).then(i => console.log("La res"),i)
 };
 
 const getTasks = async (folderName, setItems) => {
@@ -47,7 +55,7 @@ const getTasks = async (folderName, setItems) => {
       folderName: folderName
     }
   });
-  let data = JSON.parse(res.data)
+  let data = JSON.parse(res.data);
   console.log("la res", data);
   if (data.length) {
     setItems(data);
@@ -66,7 +74,7 @@ const ToDoList = props => {
   const destroy = (item, e) => {
     const newItems = items.filter(i => i !== item);
     setItems(newItems);
-    removeTask(item, folderName);
+    await removeTask(item, folderName);
   };
 
   const createItem = item => {
