@@ -11,29 +11,43 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const createNewFolder = folderName => {
-  axios
-    .post(api + "/folders", {
-      folderName: folderName
-    })
-    .then(i => console.log("El post devolvio", i));
+const createNewFolder = async folderName => {
+  let url = api + "/folders";
+  let data = {
+    folderName: folderName
+  };
+  let res = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
 };
 
 const removeFolder = async folderName => {
+  let headers = {
+    Accept: "*/*",
+    'Access-Control-Allow-Methods': '*'
+  };
   console.log("voy a borrar", folderName);
-
-  await axios({
-    method: "DELETE",
-    url: api + "/folders",
-    data: {
-      folderName: folderName
-    }
+  let url = api + "/folders";
+  console.log("La uri", url);
+  let data = {
+    folderName: folderName
+  };
+  let res = await fetch(url, {
+    method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+    headers: headers,
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
   });
+  console.log("Res del delete", res);
 };
 
 const getFolders = async setFolders => {
   let res;
-  res = await axios.get(api + "/folders");
+  res = await axios.get(api + "/folders", {
+    headers: {
+      Accept: "*/*"
+    }
+  });
   console.log("la res", res.data);
   setFolders(res.data);
 };
