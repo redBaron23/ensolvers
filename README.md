@@ -10,13 +10,24 @@ This project was carried out with the following technologies:
 Backend:
 I chose use a serverless backend, using Amazon Web Service Cloud, so the following technologies are provided by Amazon.
 
-* [Nodejs 12.x]
+
+Server:
+
+* [ MYSQL ] - 5.7.32
+* [ Java ] - 1.8
+* [ Spring Boot ] - 2.3.5
+* [ Spring ] - 4.8.1
+
+Serverless:
+
+* [Nodejs ] - 12.x
 * [Lambda] - This make the serverless magic!
 * [Dynamodb] - A no-sql database
 * [Amplify] - You can checkout the CD/CI [master branch](https://master.d1xbpv217otl93.amplifyapp.com) and [dev branch](https://dev.d1xbpv217otl93.amplifyapp.com).
 * [ApiGateWay] - A way to connect the lambda function with the API/REST
 
 Frontend:
+
 * [React 11.1.1] - Frontend 
 * [Material-ui 4.11.0] - Framework for React
 
@@ -26,6 +37,10 @@ First you need to clone this branch
 
 
 ### Prerequisites
+
+* [ npm ] -
+* [ Docker ] - It uses a Mysql docker image
+* [ Java ] - 1.8
 
 You will need node and npm installed. Or you can just use it on your browser [here](https://master.d1xbpv217otl93.amplifyapp.com)
 
@@ -39,14 +54,6 @@ Now you can use the script running:
 ./build.zsh
 ```
 
-Or you can do it manually
-
-
-```
-cd client/
-npm i
-npm run build
-serve -s ./build/index.html
 
 ```
 
