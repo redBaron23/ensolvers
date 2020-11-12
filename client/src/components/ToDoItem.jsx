@@ -37,9 +37,16 @@ const handleNewDescription = (e, setNewDescription) => {
   setNewDescription(value);
 };
 
-const handleSave = (newDescription, setDescription, openDialog,description,folderName,editTaskName) => {
+const handleSave = (
+  newDescription,
+  setDescription,
+  openDialog,
+  description,
+  folderName,
+  editTaskName
+) => {
+  editTaskName(description, newDescription, folderName);
   setDescription(newDescription);
-  editTaskName(description,newDescription,folderName);
   openDialog(false);
 };
 
@@ -53,7 +60,7 @@ const handleCloseDialog = setOpenDialog => {
 const ToDoItem = props => {
   const classes = useStyles();
 
-  const { text, destroy,folderName,editTaskName } = props;
+  const { text, destroy, folderName, editTaskName } = props;
 
   const [newDescription, setNewDescription] = useState("");
   const [description, setDescription] = useState(text);
@@ -65,7 +72,9 @@ const ToDoItem = props => {
         open={openDialog}
         onClose={() => handleCloseDialog(setOpenDialog)}
       >
-        <DialogTitle id="form-dialog-title">Editing Task "{description}"</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          Editing Task "{description}"
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -79,7 +88,14 @@ const ToDoItem = props => {
         <DialogActions>
           <Button
             onClick={() =>
-              handleSave(newDescription, setDescription, setOpenDialog,description,folderName,editTaskName)
+              handleSave(
+                newDescription,
+                setDescription,
+                setOpenDialog,
+                description,
+                folderName,
+                editTaskName
+              )
             }
             color="primary"
           >
@@ -105,7 +121,11 @@ const ToDoItem = props => {
             >
               Edit
             </Button>
-	    <Button className={classes.button} onClick={destroy}color="primary">
+            <Button
+              className={classes.button}
+              onClick={destroy}
+              color="primary"
+            >
               Remove
             </Button>
           </CardContent>

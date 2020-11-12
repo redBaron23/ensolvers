@@ -13,22 +13,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const editTaskName = async (taskName, newTaskName, folderName) => {
-  await removeTask(taskName, folderName);
-  await createTask(newTaskName, folderName);
-};
+const createTask = (item, folderName, tasks) => {
+  let exist = tasks.includes(i => i === item);
 
-const createTask = (item, folderName) => {
-  axios
-    .post(api + "/items", {
+  if (!exist) {
+    axios.post(api + "/items", {
       folderName: folderName,
       item: item
-    })
-    .then(i => console.log("El post devolvio", i));
+    });
+  }
 };
 
 const removeTask = async (item, folderName) => {
-
   console.log("Borre la res", res);
   let headers = {
     Accept: "*/*",
@@ -45,7 +41,7 @@ const removeTask = async (item, folderName) => {
     method: "DELETE", // *GET, POST, PUT, DELETE, etc.
     headers: headers,
     body: JSON.stringify(data) // body data type must match "Content-Type" header
-  }).then(i => console.log("La res"),i)
+  }).then(i => console.log("La res"), i);
 };
 
 const getTasks = async (folderName, setItems) => {
@@ -71,19 +67,24 @@ const ToDoList = props => {
     console.log("items", items);
   }, []);
 
+  const editTaskName = async (taskName, newTaskName, folderName, items) => {
+    const exist = items.filter(i => i === newTaskName);
+    //Si no existe el nuevo nombre
+    console.log("Existe?",exist)
+    if (!exist) {
+      await createTask(newTaskName, folderName, items);
+      await removeTask(taskName, folderName);
+    }
+  };
   const destroy = (item, e) => {
     const newItems = items.filter(i => i !== item);
     setItems(newItems);
-    await removeTask(item, folderName);
+    removeTask(item, folderName);
   };
 
   const createItem = item => {
-    const exist = items.filter(i => i === item);
-
-    if (!exist.length) {
-      setItems([...items, item]);
-      createTask(item, folderName);
-    }
+    setItems([...items, item]);
+    createTask(item, folderName, items);
   };
   return (
     <div className={classes.root}>
