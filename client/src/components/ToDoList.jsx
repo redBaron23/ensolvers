@@ -47,8 +47,11 @@ const getTasks = async (folderName, setItems) => {
       folderName: folderName
     }
   });
-  console.log("la res", res.data);
-  setItems(res.data);
+  let data = JSON.parse(res.data)
+  console.log("la res", data);
+  if (data.length) {
+    setItems(data);
+  }
 };
 const ToDoList = props => {
   const { folderName, onExit } = props;
@@ -57,7 +60,7 @@ const ToDoList = props => {
   const classes = useStyles();
   useEffect(() => {
     getTasks(folderName, setItems);
-  console.log("items",items)
+    console.log("items", items);
   }, []);
 
   const destroy = (item, e) => {
@@ -80,7 +83,9 @@ const ToDoList = props => {
         <Grid container xs={12} sm={12} md={12} spacing={2}>
           <Grid key={0} item xs={4}>
             <Typography variant="h3">
-              <Link color="inherit" onClick={onExit}>Folders</Link>{" "}
+              <Link color="inherit" onClick={onExit}>
+                Folders
+              </Link>{" "}
             </Typography>
           </Grid>
           <Grid key={1} item xs={4}>
