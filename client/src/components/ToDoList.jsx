@@ -25,7 +25,6 @@ const createTask = (item, folderName, tasks) => {
 };
 
 const removeTask = async (item, folderName) => {
-  console.log("Borre la res", res);
   let headers = {
     Accept: "*/*",
     "Access-Control-Allow-Methods": "*"
@@ -41,7 +40,7 @@ const removeTask = async (item, folderName) => {
     method: "DELETE", // *GET, POST, PUT, DELETE, etc.
     headers: headers,
     body: JSON.stringify(data) // body data type must match "Content-Type" header
-  }).then(i => console.log("La res"), i);
+  });
 };
 
 const getTasks = async (folderName, setItems) => {
