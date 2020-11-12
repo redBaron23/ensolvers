@@ -130,49 +130,43 @@ exports.handler = async(event) => {
 
     try {
 
-        if (req.folderName || req.item) {
-            if (event.httpMethod === "GET") {
+        if (event.httpMethod === "GET") {
 
-                if (event.resource === "/items") {
-                    res = await getItems(req.folderName)
-                }
-                else {
-                    res = await getFolders();
-                }
-
-                response.statusCode = 200
-                response.body = JSON.stringify(res)
+            if (event.resource === "/items" && req.folderName) {
+                res = await getItems(req.folderName)
             }
-            else if (event.httpMethod === "POST") {
-
-                if (event.resource === "/items") {
-                    res = await createItem(req.folderName, req.item)
-                }
-                else {
-                    let folder = {
-                        folderName: req.folderName,
-                        items: []
-                    }
-                    res = await createFolder(folder)
-                }
-
+            else {
+                res = await getFolders();
             }
 
-            else if (event.httpMethod === "DELETE") {
-                if (event.resource === "/items") {
-                    res = await deleteItem(req.item, req.folderName)
-                }
-                else {
-                    res = await deleteFolder(req.folderName)
-                }
-
-            }
+            response.statusCode = 200
+            response.body = JSON.stringify(res)
         }
-        else {
-            errMessage = "Need more parameters"
-            response.statusCode = 400
-            response.body = JSON.stringify(errMessage)
+        else if (event.httpMethod === "POST" && req.folderName) {
+
+            if (event.resource === "/items" && req.item) {
+                res = await createItem(req.folderName, req.item)
+            }
+            else {
+                let folder = {
+                    folderName: req.folderName,
+                    items: []
+                }
+                res = await createFolder(folder)
+            }
+
         }
+
+        else if (event.httpMethod === "DELETE" && req.folderName) {
+            if (event.resource === "/items" && req.item) {
+                res = await deleteItem(req.item, req.folderName)
+            }
+            else {
+                res = await deleteFolder(req.folderName)
+            }
+
+        }
+
 
     }
     catch (e) {
