@@ -1,10 +1,13 @@
 package com.server.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,13 @@ import com.server.dao.FolderDAO;
 import com.server.model.Folder;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+
+
+
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("api")
 public class FolderRest {
@@ -21,12 +31,14 @@ public class FolderRest {
 	private FolderDAO folderDAO;
 	
 	
-	
+
 
 	//Folders
-	
 	@PostMapping("/folders")
-	public void saveFolder(@RequestBody String rawJson) {
+	public void saveFolder(@RequestBody String rawJson,final HttpServletResponse response) {
+		
+		System.out.println(rawJson);
+	    response.setHeader("Access-Control-Allow-Origin", "*");
 		JSONObject json = new JSONObject(rawJson);
 		String folderName = json.getString("folderName");
 		Folder folder = new Folder();
@@ -35,20 +47,27 @@ public class FolderRest {
 		folderDAO.save(folder);
 	}
 	
+	
 	@GetMapping("/folders")
-	public String getFolder(){
+	public String getFolder(final HttpServletResponse response){
+	    response.setHeader("Access-Control-Allow-Origin", "*");
+
 		List<Folder> folders = folderDAO.findAll();
 		JSONArray folderNames = new JSONArray();
 		
 		for (Folder folder : folders) {
 			folderNames.put(folder.getFolder_name());
 		}
+		
 		return folderNames.toString();
 	}
 	
 	@DeleteMapping("/folders")
-	public void deleteFolder(@RequestBody String rawJson) {
+	public void deleteFolder(@RequestBody String rawJson,final HttpServletResponse response) {
 		
+		System.out.print(rawJson);
+	    response.setHeader("Access-Control-Allow-Origin", "*");;
+
 		//Parse camelCase
 		JSONObject json = new JSONObject(rawJson);
 		String folderName = json.getString("folderName");
@@ -65,11 +84,11 @@ public class FolderRest {
 	//Items
 	//
 	
-	
 	@PostMapping("/items")
-	public void saveItem(@RequestBody String rawJson){
+	public void saveItem(@RequestBody String rawJson,final HttpServletResponse response){
 		
-		
+	    response.setHeader("Access-Control-Allow-Origin", "*");;
+
 			//Parse camelCase
 			JSONObject json = new JSONObject(rawJson);
 			String folderName = json.getString("folderName");
@@ -97,11 +116,11 @@ public class FolderRest {
 			}
 	}
 	
-	
 	@DeleteMapping("/items")
-	public void deleteItem(@RequestBody String rawJson){
+	public void deleteItem(@RequestBody String rawJson,final HttpServletResponse response){
 		
-		
+			response.setHeader("Access-Control-Allow-Origin", "*");
+
 			//Parse camelCase
 			JSONObject json = new JSONObject(rawJson);
 			String folderName = json.getString("folderName");
@@ -140,9 +159,11 @@ public class FolderRest {
 				}
 			}
 	}
-	
+
 	@GetMapping("/items")
-	public String getItems(@RequestParam String folderName){
+	public String getItems(@RequestParam String folderName,final HttpServletResponse response){
+		response.setHeader("Access-Control-Allow-Origin", "*");
+
 		JSONArray items = new JSONArray();
 		List<Folder> folders = folderDAO.findAll();
 		for (Folder folder : folders) {
@@ -150,7 +171,9 @@ public class FolderRest {
 				items.put(folder.getItems());
 			}
 		}
+		
 		return items.toString();
+		
 	}
 	
 
