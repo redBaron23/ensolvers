@@ -26,19 +26,37 @@ public class FolderRest {
 	//Folders
 	
 	@PostMapping("/folders")
-	public void saveFolder(@RequestBody Folder folder) {
+	public void saveFolder(@RequestBody String rawJson) {
+		JSONObject json = new JSONObject(rawJson);
+		String folderName = json.getString("folderName");
+		Folder folder = new Folder();
+		folder.setFolder_name(folderName);
 		folder.setItems("[]");
 		folderDAO.save(folder);
 	}
 	
 	@GetMapping("/folders")
-	public List<Folder> getFolder(){
-		return folderDAO.findAll();
+	public String getFolder(){
+		List<Folder> folders = folderDAO.findAll();
+		JSONArray folderNames = new JSONArray();
+		
+		for (Folder folder : folders) {
+			folderNames.put(folder.getFolder_name());
+		}
+		return folderNames.toString();
 	}
 	
 	@DeleteMapping("/folders")
-	public void deleteFolder(@RequestBody Folder folder) {
-		folderDAO.delete(folder);;
+	public void deleteFolder(@RequestBody String rawJson) {
+		
+		//Parse camelCase
+		JSONObject json = new JSONObject(rawJson);
+		String folderName = json.getString("folderName");
+		Folder folder = new Folder();
+		folder.setFolder_name(folderName);
+		
+		
+		folderDAO.delete(folder);
 	}
 	
 	
@@ -49,13 +67,18 @@ public class FolderRest {
 	
 	
 	@PostMapping("/items")
-	public void saveItem(@RequestBody Folder reqFolder){
-
+	public void saveItem(@RequestBody String rawJson){
+		
+		
+			//Parse camelCase
+			JSONObject json = new JSONObject(rawJson);
+			String folderName = json.getString("folderName");
+			Folder reqFolder = new Folder();
+			reqFolder.setFolder_name(folderName);
 		
 			//Just insert one
-			String item = reqFolder.getItems();
+			String item = json.getString("item");
 
-			String folderName = reqFolder.getFolder_name();
 			JSONArray items;
 			List<Folder> folders = folderDAO.findAll();
 			for (Folder folder : folders) {
@@ -76,13 +99,19 @@ public class FolderRest {
 	
 	
 	@DeleteMapping("/items")
-	public void deleteItem(@RequestBody Folder reqFolder){
-
+	public void deleteItem(@RequestBody String rawJson){
+		
+		
+			//Parse camelCase
+			JSONObject json = new JSONObject(rawJson);
+			String folderName = json.getString("folderName");
+			Folder reqFolder = new Folder();
+			reqFolder.setFolder_name(folderName);
 		
 			//Just insert one
-			String item = reqFolder.getItems();
+			String item = json.getString("item");
+		
 
-			String folderName = reqFolder.getFolder_name();
 			JSONArray items;
 			List<Folder> folders = folderDAO.findAll();
 			for (Folder folder : folders) {
@@ -113,11 +142,11 @@ public class FolderRest {
 	}
 	
 	@GetMapping("/items")
-	public String getItems(@RequestParam String folder_name){
+	public String getItems(@RequestParam String folderName){
 		JSONArray items = new JSONArray();
 		List<Folder> folders = folderDAO.findAll();
 		for (Folder folder : folders) {
-			if(folder.getFolder_name().equals(folder_name)) {
+			if(folder.getFolder_name().equals(folderName)) {
 				items.put(folder.getItems());
 			}
 		}
